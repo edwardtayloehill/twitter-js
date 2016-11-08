@@ -3,6 +3,10 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const nunjucks = require('nunjucks');
+const routes = require('./routes/');
+const path = require('path');
+app.use('/', routes);
+
 nunjucks.configure('views', { noCache: true });
 //set up a port
 const port = 3000;
@@ -11,6 +15,8 @@ app.listen(port, (request, response) => {
   console.log("I am stoked on port:", port);
 })
 
+app.use(express.static(path.join(__dirname, 'public' )))
+
 app.use(function (request, response, next) {
     // do your logging here
     console.log(request.method, request.path)
@@ -18,23 +24,6 @@ app.use(function (request, response, next) {
     next()
 })
 
-app.use("/special/", function(){
-  console.log("You are in the special place");
-})
-
-app.get("/", (request,response) => {
-  response.send("Hello world")
-
-})
-
-app.get("/news", (request,response) => {
-  response.send("No news is good news")
-})
-
-app.get("/index", (request, response) => {
-  var people = [{name: 'Full'}, {name: 'Stacker'}, {name: 'Son'}];
-  response.render( 'index', {title: 'Hall of Fame', people: people} );
-})
 
 var locals = {
     title: 'An Example',
