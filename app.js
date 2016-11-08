@@ -5,11 +5,22 @@ const morgan = require('morgan');
 const nunjucks = require('nunjucks');
 const routes = require('./routes/');
 const path = require('path');
+const bodyParser = require('body-parser');
+const tweetBank = require('./tweetBank');
 app.use('/', routes);
 
 nunjucks.configure('views', { noCache: true });
 //set up a port
 const port = 3000;
+
+var jsonParser = bodyParser.json();
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
+app.post('/tweets', urlencodedParser, function(req, res) {
+  var name = req.body.name;
+  var text = req.body.text;
+  tweetBank.add(name, text);
+  res.redirect('/');
+});
 
 app.listen(port, (request, response) => {
   console.log("I am stoked on port:", port);

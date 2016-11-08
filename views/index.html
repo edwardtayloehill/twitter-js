@@ -8,14 +8,29 @@
   <div class="row">
     <div class="col-md-3">
       <img src="https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAc5AAAAJGU0ZjQ0YTJjLTA4OTMtNDNjMy1iMGZkLTQzMzY3OTczYjc3Yg.jpg"><br>
-      <b>Your Name</b><br>
+      {% if showForm %}
+        <form action="/tweets" method="POST">
+          <label for="name_field">Name:</label>
+
+          <input name="name" value="{{name.name}}" type="text" id="name_field" />
+
+
+          <label for="text_field">Text:</label>
+          <input name="text" type="text" id="text_field" style="width: 350px;" />
+
+          <input type="submit" value="Submit" />
+        </form>
+      {% endif %}
+      {% for tweet in tweets %}
+      <b>{{tweet.name}}</b><br>
+      {% endfor %}
       100 followers
     </div>
     <div class="col-md-9">
 
       <!-- display tweets here -->
       {% for tweet in tweets %}
-        <li>{{tweet.content}}</li>
+        <li class="tweetbox"><img /><a href="/users/{{tweet.name}}">{{tweet.name}}</a> - <a href="/tweets/{{tweet.id}}">{{tweet.content}}</a></li>
       {% endfor %}
 
     </div>
