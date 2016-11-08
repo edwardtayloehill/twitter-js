@@ -7,7 +7,12 @@ const routes = require('./routes/');
 const path = require('path');
 const bodyParser = require('body-parser');
 const tweetBank = require('./tweetBank');
-app.use('/', routes);
+const socketio = require('socket.io');
+const server = app.listen(3000);
+const io = socketio.listen(server);
+
+app.use( '/', routes(io) );
+//app.use('/', routes);
 
 nunjucks.configure('views', { noCache: true });
 //set up a port
@@ -19,12 +24,13 @@ app.post('/tweets', urlencodedParser, function(req, res) {
   var name = req.body.name;
   var text = req.body.text;
   tweetBank.add(name, text);
+  io.sockets.emit('newTweet', { name: name, text: text });
   res.redirect('/');
 });
 
-app.listen(port, (request, response) => {
-  console.log("I am stoked on port:", port);
-})
+// app.listen(port, (request, response) => {
+//   console.log("I am stoked on port:", port);
+// })
 
 app.use(express.static(path.join(__dirname, 'public' )))
 

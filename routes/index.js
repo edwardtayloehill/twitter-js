@@ -23,7 +23,18 @@ router.get('/tweets/:id', function(req, res) {
   res.render( 'index', {tweets: list} );
 });
 
-module.exports = router;
+
+
+
+module.exports = function (io) {
+  // ...
+  // route definitions, etc.
+  // ...
+  return router;
+};
+
+
+//module.exports = router;
 
 
 // router.get("/stylesheets/style.css", (request,response) => {
